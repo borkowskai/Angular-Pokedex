@@ -1,7 +1,12 @@
 <ng-container *ngIf="pokemonsToDisplay">
-  <div *ngFor="let pokemon of pokemonsToDisplay" class="pokemons-display">
+  <ng-container *ngFor="let pokemon of pokemonsToDisplay">
     <app-pokemon [pokemon]="pokemon"></app-pokemon>
-  </div>
+  </ng-container>
+  <mat-paginator [length]="100"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]"
+                 aria-label="Select page">
+  </mat-paginator>
 </ng-container>
 
 

@@ -15,7 +15,7 @@ export class PokeApiService {
   ) {}
 
   public loadPokemons(): Observable<PokemonsList> {
-    const maxNumberOfDisplays = 10;
+    const maxNumberOfDisplays = 30;
     return this.http
     .get<PokemonsList>(
       `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=0&limit=${maxNumberOfDisplays}`
@@ -27,7 +27,7 @@ export class PokeApiService {
     );
   }
 
-  public loadPokemon(url: string): Observable<any> {
+  public loadPokemonsDetails(url: string): Observable<any>{
     return this.http
     .get<any>(
       url

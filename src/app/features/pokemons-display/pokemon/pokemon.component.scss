@@ -4,6 +4,9 @@ mat-card{
   width: 12rem;
 }
 
+mat-card-actions{
+  justify-content: flex-end ;
+}
 .material-icons {
   color: $app-blue;
 }
