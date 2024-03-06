@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { PokemonsPageComponent } from './features/pokemons-display/pokemons-page/pokemons-page.component';
 import { CoreModule } from './core/core.module';
 import { PokemonsDisplayModule } from './features/pokemons-display/pokemons-display.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { PokemonsDisplayModule } from './features/pokemons-display/pokemons-disp
     BrowserModule,
     CoreModule,
     PokemonsDisplayModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
