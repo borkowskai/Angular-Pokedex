@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PokeApiService } from 'src/app/core';
+import { PokeApiService, PokemonsList } from 'src/app/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -8,19 +9,34 @@ import { PokeApiService } from 'src/app/core';
 })
 export class PokemonsPageComponent implements OnInit {
 
+  public pokemonsToDisplay: any[] = [];
+
   constructor(private pokeApiService: PokeApiService) {
   }
 
   public ngOnInit(): void {
     this.loadPokemons();
-    this.loadPokemonDetails('ditto');
+    // this.loadPokemonDetails('ditto');
   }
 
-  private loadPokemons(){
-    this.pokeApiService.loadPokemons().subscribe();
+  private loadPokemons() {
+    this.pokeApiService.loadPokemons().subscribe({
+      next: (data: PokemonsList) => {
+
+        data.results.forEach(el => {
+
+          this.pokeApiService.loadPokemon(el.url).subscribe({
+
+            next: subData => {
+              this.pokemonsToDisplay.push(subData);
+            }
+          })
+        });
+      }
+    });
   }
 
-  private loadPokemonDetails(pokemonName: string){
+  private loadPokemonDetails(pokemonName: string) {
     this.pokeApiService.loadPokemonDetails(pokemonName).subscribe();
   }
 

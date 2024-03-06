@@ -21,7 +21,18 @@ export class PokeApiService {
       `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=0&limit=${maxNumberOfDisplays}`
     )
     .pipe(
-      tap((item) => console.log(item)),
+      catchError((error) => {
+        throw error;
+      })
+    );
+  }
+
+  public loadPokemon(url: string): Observable<any> {
+    return this.http
+    .get<any>(
+      url
+    )
+    .pipe(
       catchError((error) => {
         throw error;
       })

@@ -1,1 +1,8 @@
-<p>pokemons-page works!</p>
+<ng-container *ngIf="pokemonsToDisplay">
+  <div *ngFor="let pokemon of pokemonsToDisplay" class="pokemons-display">
+    <app-pokemon [pokemon]="pokemon"></app-pokemon>
+  </div>
+</ng-container>
+
+
+
