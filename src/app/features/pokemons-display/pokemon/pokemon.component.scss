@@ -15,5 +15,11 @@ mat-card-actions {
 }
 
 .material-icons {
-  color: $app-blue;
+  color: $app-grey;
+  opacity: 0.5;
+}
+
+.favorite-class{
+  color: $app-berry;
+  opacity: 1;
 }

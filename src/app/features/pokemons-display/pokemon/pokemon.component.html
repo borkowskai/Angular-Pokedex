@@ -8,7 +8,11 @@
     <p>
     </p>
   </mat-card-content>
-  <mat-card-actions>
-    <i class="material-icons">favorite</i>
+  <mat-card-actions
+    (click)="saveToFavorites(pokemon.name)">
+    <i
+      class="material-icons"
+      [ngClass]="{ 'favorite-class' : pokemon.savedInFavorite }"
+    >favorite</i>
   </mat-card-actions>
 </mat-card>
