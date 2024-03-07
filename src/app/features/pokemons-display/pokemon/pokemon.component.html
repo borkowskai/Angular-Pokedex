@@ -1,7 +1,6 @@
 <mat-card class="example-card">
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>{{ pokemon.name }}</mat-card-title>
+    <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
   </mat-card-header>
   <img mat-card-image src="{{ pokemon.sprites.front_default }}"
        alt="`Photo of a {{ pokemon.name }}`">

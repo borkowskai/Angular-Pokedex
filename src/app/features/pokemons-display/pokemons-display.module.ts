@@ -5,7 +5,6 @@ import { PokemonComponent } from './pokemon/pokemon.component';
 import { MaterialModule } from '../../material.module';
 
 
-
 @NgModule({
   declarations: [
     PokemonComponent
@@ -17,4 +16,5 @@ import { MaterialModule } from '../../material.module';
     CommonModule, CoreModule, MaterialModule
   ]
 })
-export class PokemonsDisplayModule { }
+export class PokemonsDisplayModule {
+}

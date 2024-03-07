@@ -1,18 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PokemonsPageComponent } from './pokemons-page.component';
-import { MockModule, MockProvider } from 'ng-mocks';
+import { MockProvider } from 'ng-mocks';
 import { PokeApiService } from '../../../core';
-import { CoreModule } from '../../../core/core.module';
+import { DestroyRef } from '@angular/core';
 
 describe('PokemonsPageComponent', () => {
   let component: PokemonsPageComponent;
   let fixture: ComponentFixture<PokemonsPageComponent>;
 
+  const pokeApiServiceMock = {
+    loadPokemons: jest.fn(),
+    loadPokemonsDetails: jest.fn()
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PokemonsPageComponent],
-      providers: [MockProvider(PokeApiService)]
+      providers: [
+        MockProvider(PokeApiService, pokeApiServiceMock),
+        MockProvider(DestroyRef)
+      ]
     });
     fixture = TestBed.createComponent(PokemonsPageComponent);
     component = fixture.componentInstance;
