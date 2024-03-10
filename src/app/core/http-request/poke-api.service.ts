@@ -48,7 +48,6 @@ export class PokeApiService {
       `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}/${pokemonName}`
     )
     .pipe(
-      tap((item) => console.log(item.weight)),
       catchError((error) => {
         console.error(`PokemonApi: issue with getting data from ${pokemonName} endoint`);
         throw error;

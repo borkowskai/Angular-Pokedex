@@ -1,1 +1,31 @@
-<p>pokemon-detail works!</p>
+<div *ngIf="pokemon" class="pokemon-detail">
+
+  <div class="inner-content">
+    <h2> Please meet your new friend:</h2>
+
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
+          <mat-card-subtitle>Type 1: {{ pokemon.types[0].type.name }}</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="pokemon.types[1]">Type 2: {{ pokemon.types[1].type.name }}
+          </mat-card-subtitle>
+          <img mat-card-image src="{{ pokemon.sprites.front_default }}"
+               alt="`Photo of a {{ pokemon.name }}`">
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <p>My moves: </p>
+        <div class="statsPokemon" *ngFor="let move of pokemon.moves.slice(0,5)">
+          <span>{{ move.move.name }}</span>
+        </div>
+        <p>My stats: </p>
+        <div class="statsPokemon" *ngFor="let stat of pokemon.stats">
+          <span>{{ stat.stat.name }}= {{ stat.base_stat }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+

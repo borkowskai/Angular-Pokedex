@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
 
-import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { forkJoin, Observable, switchMap, tap } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PokeApiService, Pokemon } from '../../../core';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
@@ -28,7 +28,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private pokeApiService: PokeApiService,
-    private destroy: DestroyRef,
+    private destroyRef: DestroyRef,
     private router: Router
   ) {
   }
@@ -44,7 +44,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
 
   public displayPokemons() {
     this.loadPokemonsDetails()
-    .pipe(takeUntilDestroyed(this.destroy))
+    .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe({
       next: (data: PokemonDetail[]) => {
         this.fullPokemonsList = data;
@@ -60,7 +60,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
         this.setDefaultPagination();
 
       }, error(err: Error) {
-        console.log(`Pokemons page: issue in receiving the data from api. Detail error: ${err}`);
+        console.error(`Pokemons page: issue in receiving the data from api. Detail error: ${err}`);
       }
     });
   }
@@ -109,10 +109,6 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
         return forkJoin(observables);
       })
     );
-  }
-
-  private loadPokemonDetails(pokemonName: string) {
-    this.pokeApiService.loadPokemonDetailByName(pokemonName).subscribe();
   }
 
   public setPagination($event: PageEvent) {

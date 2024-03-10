@@ -1,5 +1,5 @@
-<ng-container>
-  <div *ngIf="pokemonsToDisplay.length" class="display-pokemons">
+<ng-container *ngIf="pokemonsToDisplay.length">
+  <div class="display-pokemons">
     <ng-container *ngFor="let pokemon of pokemonsToDisplay; let i = index">
       <app-pokemon
         (click)="selectItem(pokemon, i)"
