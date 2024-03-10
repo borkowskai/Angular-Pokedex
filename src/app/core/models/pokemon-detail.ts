@@ -99,5 +99,5 @@ export interface PokemonDetail {
     };
   }[];
   weight: number;
-  savedInFavorite?: boolean;
+  favorite?: boolean;
 }

@@ -1,6 +1,6 @@
-<ng-container>
+<ng-container >
   <div *ngIf="pokemonsToDisplay.length" class="display-pokemons">
-    <ng-container *ngFor="let pokemon of pokemonsToDisplay, let i=index">
+    <ng-container *ngFor="let pokemon of pokemonsToDisplay">
       <app-pokemon
         [ngClass]="{ 'selected-card' : selectedCard }"
         (favoritePokemonName)="handleFavorites($event)"

@@ -22,7 +22,7 @@ export class PokeApiService {
     )
     .pipe(
       catchError((error) => {
-        console.error(`PokemonApi: issue with getting data from ${PokeApiService.pokemonEndpoint} 
+        console.error(`PokemonApi: issue with getting data from ${PokeApiService.pokemonEndpoint}
         endoint for max number ${maxNumberOfDisplays}`);
         throw error;
       })
@@ -42,9 +42,9 @@ export class PokeApiService {
     );
   }
 
-  public loadPokemonDetails(pokemonName: string): Observable<any> {
+  public loadPokemonDetailByName(pokemonName: string): Observable<PokemonDetail> {
     return this.http
-    .get<any>(
+    .get<PokemonDetail>(
       `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}/${pokemonName}`
     )
     .pipe(

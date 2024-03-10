@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PokeApiService, Pokemon } from '../../../core';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -14,10 +15,11 @@ import { PokemonDetail } from '../../../core/models/pokemon-detail';
 export class PokemonsPageComponent implements OnInit, OnDestroy {
 
   private offset = 0;
+  private localStorageKey = 'favorites';
   public tempTotalNumber: number = 100; // till the moment the call to API isn't done for next elements
 
   public pokemonsToDisplay: PokemonDetail[] = [];
-  public originalPokemonsList!: PokemonDetail[];
+  public fullPokemonsList: PokemonDetail[] = [];
   public totalNumber!: number;
   public pageSize: number = 5;
   public selectedCard: boolean = false;
@@ -33,24 +35,25 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    localStorage.removeItem('favorites');
-    localStorage.setItem('favorites', this.savedAsFavorites.toString());
+    localStorage.removeItem(this.localStorageKey);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedAsFavorites));
   }
 
   public displayPokemons() {
     this.loadPokemonsDetails()
     .pipe(takeUntilDestroyed(this.destroy))
     .subscribe({
-      next: (data) => {
-        this.pokemonsToDisplay = data;
-        const storedFavorites = localStorage.getItem('favorites');
+      next: (data: PokemonDetail[]) => {
+        this.fullPokemonsList = data;
+        const storedFavorites = localStorage.getItem(this.localStorageKey);
         if (storedFavorites) {
           // if somebody clear localStorage or cache, to see changes the page needs to be refreshed
           // could be treated on the future
           this.savedAsFavorites = JSON.parse(storedFavorites);
-          this.pokemonsToDisplay = this.updateFavoritesLocal(this.savedAsFavorites, this.pokemonsToDisplay);
+          this.fullPokemonsList = this.updateFavoritesLocal(this.savedAsFavorites, this.fullPokemonsList);
         }
-        this.originalPokemonsList = this.pokemonsToDisplay;
+        // we need cloneDeep as Object is nested, the spread operator is only making the shallow copy
+        this.pokemonsToDisplay = cloneDeep(this.fullPokemonsList);
         this.setDefaultPagination();
 
       }, error(err: Error) {
@@ -62,19 +65,18 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   public handleFavorites(pokemonName: string) {
     this.savedAsFavorites = this.prepareFavoriteListToStore(pokemonName, this.savedAsFavorites);
 
+    this.fullPokemonsList = this.updateFavoritesLocal([pokemonName], this.fullPokemonsList);
     this.pokemonsToDisplay = this.updateFavoritesLocal([pokemonName], this.pokemonsToDisplay);
-
-    localStorage.removeItem('favorites');
-    localStorage.setItem('favorites', JSON.stringify(this.savedAsFavorites));
   }
 
   private updateFavoritesLocal(pokemonNames: string[], currentPokemonList: PokemonDetail[]): PokemonDetail[] {
-    const pokemonList = [...currentPokemonList];
+    const pokemonList: PokemonDetail[] = cloneDeep(currentPokemonList);
     for (const pokemoName of pokemonNames) {
+
       const itemToUpdate = pokemonList.find(item => item.name === pokemoName);
       const index = pokemonList.findIndex(item => item.name === pokemoName);
       if (itemToUpdate) {
-        itemToUpdate.savedInFavorite = itemToUpdate.savedInFavorite ? false : true;
+        itemToUpdate.favorite = itemToUpdate.favorite ? false : true;
         pokemonList[index] = itemToUpdate;
       }
     }
@@ -82,7 +84,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   }
 
   private prepareFavoriteListToStore(pokemonName: string, currentFavorites: string[]): string[] {
-    let favorites = [...currentFavorites];
+    let favorites = currentFavorites;
     const existingItem = favorites.find(item => item === pokemonName);
     if (existingItem) {
       favorites = favorites.filter(item => item !== pokemonName);
@@ -92,7 +94,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
     return favorites;
   }
 
-  private loadPokemonsDetails(): Observable<any> {
+  private loadPokemonsDetails(): Observable<PokemonDetail[]> {
     return this.pokeApiService.loadPokemons(this.offset, this.tempTotalNumber)
     .pipe(
       tap(result => {
@@ -107,11 +109,11 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   }
 
   private loadPokemonDetails(pokemonName: string) {
-    this.pokeApiService.loadPokemonDetails(pokemonName).subscribe();
+    this.pokeApiService.loadPokemonDetailByName(pokemonName).subscribe();
   }
 
   public setPagination($event: PageEvent) {
-    this.pokemonsToDisplay = this.originalPokemonsList.slice($event.pageIndex * $event.pageSize,
+    this.pokemonsToDisplay = this.fullPokemonsList.slice($event.pageIndex * $event.pageSize,
       $event.pageIndex * $event.pageSize + $event.pageSize);
   }
 
@@ -123,7 +125,5 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
       length: this.tempTotalNumber
     });
   }
-
-
 }
 

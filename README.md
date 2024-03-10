@@ -2,6 +2,25 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.1.
 
+## Installation 
+### If you have node & npm 
+Run `ng install`.
+
+Run `ng serve`.
+
+### If you don't have node & npm 
+1. Install Volta: https://docs.volta.sh/guide/getting-started
+
+2. As admin in terminal: `volta install @angular/cli` or by specific version `volta install @angular/cli@16`
+(location of path isn't important - can be inside the projects repository)
+more documentation for volta: https://docs.volta.sh/guide/
+
+3. regular steps: 
+Run `ng install`.
+4. 
+Run `ng serve`.
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
