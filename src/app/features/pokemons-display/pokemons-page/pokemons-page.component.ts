@@ -1,11 +1,12 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
 
-import { forkJoin, Observable, switchMap, tap } from 'rxjs';
-import { PageEvent } from '@angular/material/paginator';
+import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PokeApiService, Pokemon } from '../../../core';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
 import { cloneDeep } from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -22,12 +23,14 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   public fullPokemonsList: PokemonDetail[] = [];
   public totalNumber!: number;
   public pageSize: number = 5;
-  public selectedCard: boolean = false;
+  public selectedCardId!: number;
   public savedAsFavorites: string[] = [];
 
   constructor(
     private pokeApiService: PokeApiService,
-    private destroy: DestroyRef) {
+    private destroy: DestroyRef,
+    private router: Router
+  ) {
   }
 
   public ngOnInit(): void {
@@ -124,6 +127,11 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
       pageSize: this.pageSize,
       length: this.tempTotalNumber
     });
+  }
+
+  public selectItem(pokemon: PokemonDetail, index: number): void{
+    this.selectedCardId = index;
+    this.router.navigate(['/', 'detail'], { queryParams: { name: pokemon.name } });
   }
 }
 
