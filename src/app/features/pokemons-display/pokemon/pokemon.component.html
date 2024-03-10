@@ -6,9 +6,7 @@
        alt="`Photo of a {{ pokemon.name }}`">
   <mat-card-actions
     (click)="saveToFavorites(pokemon.name)">
-    <i
-      class="material-icons"
-      [ngClass]="{ 'favorite-class' : pokemon.favorite }"
-    >favorite</i>
+    <i class="material-icons"
+      [ngClass]="{ 'favorite-class' : pokemon.favorite }">favorite</i>
   </mat-card-actions>
 </mat-card>
