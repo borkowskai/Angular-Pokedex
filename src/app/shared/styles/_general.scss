@@ -1,7 +1,14 @@
-
+@import "variables";
 
 mat-paginator.mat-mdc-paginator .mat-mdc-paginator-outer-container .mat-mdc-paginator-container {
-  .mat-mdc-paginator-page-size{
+  .mat-mdc-paginator-page-size {
     display: none !important;
   }
 }
+
+app-pokemons-page mat-card-actions {
+  margin-right: $regular-space;
+  display: flex;
+  justify-content: flex-end;
+}
+

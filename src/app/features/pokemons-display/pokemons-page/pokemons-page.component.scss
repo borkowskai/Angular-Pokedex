@@ -20,12 +20,12 @@ app-pokemon.selected-card {
 
 
 form {
-  margin: 1.5rem;
+  margin: $regular-space;
   display: flex;
   justify-content: flex-end;
 
   input{
-    height: 2rem;
+    height: $regular-space;
     border: none;
     border-bottom: 1px solid $app-grey;
     outline: none;
