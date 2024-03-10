@@ -4,6 +4,7 @@ import { CoreModule } from '../../core/core.module';
 import { PokemonComponent } from './pokemon/pokemon.component';
 import { MaterialModule } from '../../material.module';
 import { PokemonDetailComponent } from './pokemon-detail/pokemon-detail.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,11 @@ import { PokemonDetailComponent } from './pokemon-detail/pokemon-detail.componen
     PokemonComponent
   ],
   imports: [
-    CommonModule, CoreModule, MaterialModule
+    CommonModule,
+    CoreModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class PokemonsDisplayModule {
