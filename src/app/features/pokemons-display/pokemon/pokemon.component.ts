@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PokemonDetail } from '../../../core/models/pokemon-detail';
 
 @Component({
   selector: 'app-pokemon',
@@ -7,6 +8,11 @@ import { Component, Input } from '@angular/core';
 })
 export class PokemonComponent {
 
-  @Input() pokemon: any;
+  @Input() pokemon!: PokemonDetail;
+
+  @Output() favoritePokemonName: EventEmitter<string> = new EventEmitter<string>();
+  saveToFavorites(pokemonName: string){
+    this.favoritePokemonName.emit(pokemonName);
+  }
 
 }

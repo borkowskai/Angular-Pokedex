@@ -1,11 +1,20 @@
-<ng-container *ngIf="pokemonsToDisplay">
-  <ng-container *ngFor="let pokemon of pokemonsToDisplay">
-    <app-pokemon [pokemon]="pokemon"></app-pokemon>
-  </ng-container>
-  <mat-paginator [length]="100"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 25, 100]"
-                 aria-label="Select page">
+<ng-container *ngIf="pokemonsToDisplay.length">
+  <div class="display-pokemons">
+    <ng-container *ngFor="let pokemon of pokemonsToDisplay; let i = index">
+      <app-pokemon
+        (click)="selectItem(pokemon, i)"
+        [ngClass]="{ 'selected-card' : selectedCardId === i }"
+        (favoritePokemonName)="handleFavorites($event)"
+        [pokemon]="pokemon"
+      ></app-pokemon>
+    </ng-container>
+  </div>
+
+  <mat-paginator
+    (page)="setPagination($event)"
+    [length]="tempTotalNumber"
+    [pageSize]="pageSize"
+    aria-label="Select page">
   </mat-paginator>
 </ng-container>
 

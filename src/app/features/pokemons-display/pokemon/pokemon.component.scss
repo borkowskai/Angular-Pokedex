@@ -1,12 +1,25 @@
 @import "_variables";
 
-mat-card{
+mat-card {
   width: 12rem;
 }
 
-mat-card-actions{
-  justify-content: flex-end ;
+mat-card-header, mat-card-title {
+  display: grid;
+  justify-content: center;
 }
+
+mat-card-actions {
+  margin-right: 1rem;
+  justify-content: flex-end;
+}
+
 .material-icons {
-  color: $app-blue;
+  color: $app-grey;
+  opacity: 0.5;
+}
+
+.favorite-class{
+  color: $app-berry;
+  opacity: 1;
 }

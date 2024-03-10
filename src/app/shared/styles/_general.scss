@@ -1,4 +1,7 @@
-app-pokemons-page{
-  display: flex;
-  flex-wrap: wrap;
+
+
+mat-paginator.mat-mdc-paginator .mat-mdc-paginator-outer-container .mat-mdc-paginator-container {
+  .mat-mdc-paginator-page-size{
+    display: none !important;
+  }
 }

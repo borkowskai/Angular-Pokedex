@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap } from 'rxjs';
 import { PokemonsList } from '../models/pokemons-list';
+import { PokemonDetail } from '../models/pokemon-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -14,39 +15,41 @@ export class PokeApiService {
     private readonly http: HttpClient
   ) {}
 
-  public loadPokemons(): Observable<PokemonsList> {
-    const maxNumberOfDisplays = 30;
+  public loadPokemons(offset: number, maxNumberOfDisplays: number): Observable<PokemonsList> {
     return this.http
     .get<PokemonsList>(
-      `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=0&limit=${maxNumberOfDisplays}`
+      `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=${offset}&limit=${maxNumberOfDisplays}`
     )
     .pipe(
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data from ${PokeApiService.pokemonEndpoint}
+        endoint for max number ${maxNumberOfDisplays}`);
         throw error;
       })
     );
   }
 
-  public loadPokemonsDetails(url: string): Observable<any>{
+  public loadPokemonsDetails(url: string): Observable<PokemonDetail>{
     return this.http
-    .get<any>(
+    .get<PokemonDetail>(
       url
     )
     .pipe(
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data for specific pokemon, search url ${url}`);
         throw error;
       })
     );
   }
 
-  public loadPokemonDetails(pokemonName: string): Observable<any> {
+  public loadPokemonDetailByName(pokemonName: string): Observable<PokemonDetail> {
     return this.http
-    .get<any>(
+    .get<PokemonDetail>(
       `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}/${pokemonName}`
     )
     .pipe(
-      tap((item) => console.log(item.weight)),
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data from ${pokemonName} endoint`);
         throw error;
       })
     );

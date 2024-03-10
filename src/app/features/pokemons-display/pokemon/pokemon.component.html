@@ -1,15 +1,12 @@
 <mat-card class="example-card">
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>{{ pokemon.name }}</mat-card-title>
+    <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
   </mat-card-header>
   <img mat-card-image src="{{ pokemon.sprites.front_default }}"
        alt="`Photo of a {{ pokemon.name }}`">
-  <mat-card-content>
-    <p>
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <i class="material-icons">favorite</i>
+  <mat-card-actions
+    (click)="saveToFavorites(pokemon.name)">
+    <i class="material-icons"
+      [ngClass]="{ 'favorite-class' : pokemon.favorite }">favorite</i>
   </mat-card-actions>
 </mat-card>

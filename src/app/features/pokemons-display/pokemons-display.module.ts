@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { CoreModule } from '../../core/core.module';
 import { PokemonComponent } from './pokemon/pokemon.component';
 import { MaterialModule } from '../../material.module';
-
+import { PokemonDetailComponent } from './pokemon-detail/pokemon-detail.component';
 
 
 @NgModule({
   declarations: [
-    PokemonComponent
+    PokemonComponent,
+    PokemonDetailComponent
   ],
   exports: [
     PokemonComponent
@@ -17,4 +18,5 @@ import { MaterialModule } from '../../material.module';
     CommonModule, CoreModule, MaterialModule
   ]
 })
-export class PokemonsDisplayModule { }
+export class PokemonsDisplayModule {
+}

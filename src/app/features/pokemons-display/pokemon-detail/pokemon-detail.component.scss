@@ -1,0 +1,34 @@
+@import "_variables";
+
+.pokemon-detail {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+
+
+  .inner-content {
+    flex-direction: column;
+
+    h2 {
+      text-align: center;
+    }
+  }
+}
+
+mat-card {
+  width: 20rem;
+
+  mat-card-title-group {
+    img:hover {
+      transform:scale(1.7);
+      transition:0.5s;
+      z-index: 1;
+    }
+  }
+
+  mat-card-content {
+    p{
+      margin-top: 1rem;
+    }
+  }
+}
