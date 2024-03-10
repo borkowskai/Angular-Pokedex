@@ -15,14 +15,15 @@ export class PokeApiService {
     private readonly http: HttpClient
   ) {}
 
-  public loadPokemons(): Observable<PokemonsList> {
-    const maxNumberOfDisplays = 5;
+  public loadPokemons(offset: number, maxNumberOfDisplays: number): Observable<PokemonsList> {
     return this.http
     .get<PokemonsList>(
-      `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=0&limit=${maxNumberOfDisplays}`
+      `${PokeApiService.baseUrl}/${PokeApiService.pokemonEndpoint}?offset=${offset}&limit=${maxNumberOfDisplays}`
     )
     .pipe(
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data from ${PokeApiService.pokemonEndpoint} 
+        endoint for max number ${maxNumberOfDisplays}`);
         throw error;
       })
     );
@@ -35,6 +36,7 @@ export class PokeApiService {
     )
     .pipe(
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data for specific pokemon, search url ${url}`);
         throw error;
       })
     );
@@ -48,6 +50,7 @@ export class PokeApiService {
     .pipe(
       tap((item) => console.log(item.weight)),
       catchError((error) => {
+        console.error(`PokemonApi: issue with getting data from ${pokemonName} endoint`);
         throw error;
       })
     );

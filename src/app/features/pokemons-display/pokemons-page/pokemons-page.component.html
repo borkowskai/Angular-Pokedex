@@ -1,6 +1,6 @@
-<ng-container *ngIf="pokemonsToDisplay.length">
-  <div class="display-pokemons">
-    <ng-container *ngFor="let pokemon of pokemonsToDisplay">
+<ng-container>
+  <div *ngIf="pokemonsToDisplay.length" class="display-pokemons">
+    <ng-container *ngFor="let pokemon of pokemonsToDisplay, let i=index">
       <app-pokemon
         [ngClass]="{ 'selected-card' : selectedCard }"
         (favoritePokemonName)="handleFavorites($event)"
@@ -9,9 +9,11 @@
     </ng-container>
   </div>
 
-  <mat-paginator [length]="tempTotalNumber"
-                 [pageSize]="pageSize"
-                 aria-label="Select page">
+  <mat-paginator
+    (page)="setPagination($event)"
+    [length]="tempTotalNumber"
+    [pageSize]="pageSize"
+    aria-label="Select page">
   </mat-paginator>
 </ng-container>
 

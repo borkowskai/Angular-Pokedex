@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, DestroyRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
 
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PokeApiService, Pokemon } from '../../../core';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
@@ -11,15 +11,15 @@ import { PokemonDetail } from '../../../core/models/pokemon-detail';
   templateUrl: './pokemons-page.component.html',
   styleUrls: ['./pokemons-page.component.scss']
 })
-export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PokemonsPageComponent implements OnInit, OnDestroy {
+
+  private offset = 0;
+  public tempTotalNumber: number = 100; // till the moment the call to API isn't done for next elements
 
   public pokemonsToDisplay: PokemonDetail[] = [];
+  public originalPokemonsList!: PokemonDetail[];
   public totalNumber!: number;
-  public tempTotalNumber: number = 100; // till the moment the call to API isn't done for next elements
-  public pageSize: number = 10;
-  public displayFrom: number = 0;
-  public displayTo: number = 9;
-
+  public pageSize: number = 5;
   public selectedCard: boolean = false;
   public savedAsFavorites: string[] = [];
 
@@ -28,19 +28,8 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroy: DestroyRef) {
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   public ngOnInit(): void {
     this.displayPokemons();
-
-
-    // this.loadPokemonDetails('ditto');
-  }
-
-  ngAfterViewInit() {
-    if (this.paginator?.page) {
-      this.managePageChanges();
-    }
   }
 
   public ngOnDestroy(): void {
@@ -55,12 +44,17 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (data) => {
         this.pokemonsToDisplay = data;
         const storedFavorites = localStorage.getItem('favorites');
-        if(storedFavorites){
-          // if somebody clear localStoral or cache, to see changes the page needs to be refreshed
+        if (storedFavorites) {
+          // if somebody clear localStorage or cache, to see changes the page needs to be refreshed
           // could be treated on the future
           this.savedAsFavorites = JSON.parse(storedFavorites);
           this.pokemonsToDisplay = this.updateFavoritesLocal(this.savedAsFavorites, this.pokemonsToDisplay);
         }
+        this.originalPokemonsList = this.pokemonsToDisplay;
+        this.setDefaultPagination();
+
+      }, error(err: Error) {
+        console.log(`Pokemons page: issue in receiving the data from api. Detail error: ${err}`);
       }
     });
   }
@@ -74,9 +68,9 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     localStorage.setItem('favorites', JSON.stringify(this.savedAsFavorites));
   }
 
-  private updateFavoritesLocal(pokemonNames: string[], currentPokemonList: PokemonDetail[]): PokemonDetail[]{
+  private updateFavoritesLocal(pokemonNames: string[], currentPokemonList: PokemonDetail[]): PokemonDetail[] {
     const pokemonList = [...currentPokemonList];
-    for(const pokemoName of pokemonNames){
+    for (const pokemoName of pokemonNames) {
       const itemToUpdate = pokemonList.find(item => item.name === pokemoName);
       const index = pokemonList.findIndex(item => item.name === pokemoName);
       if (itemToUpdate) {
@@ -87,10 +81,10 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     return pokemonList;
   }
 
-  private prepareFavoriteListToStore(pokemonName: string, currentFavorites: string[]): string[]{
+  private prepareFavoriteListToStore(pokemonName: string, currentFavorites: string[]): string[] {
     let favorites = [...currentFavorites];
     const existingItem = favorites.find(item => item === pokemonName);
-    if(existingItem){
+    if (existingItem) {
       favorites = favorites.filter(item => item !== pokemonName);
     } else {
       favorites.push(pokemonName);
@@ -99,7 +93,7 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadPokemonsDetails(): Observable<any> {
-    return this.pokeApiService.loadPokemons()
+    return this.pokeApiService.loadPokemons(this.offset, this.tempTotalNumber)
     .pipe(
       tap(result => {
         this.totalNumber = result.count;
@@ -116,10 +110,18 @@ export class PokemonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pokeApiService.loadPokemonDetails(pokemonName).subscribe();
   }
 
-  private managePageChanges() {
-    this.paginator.page
-    .pipe(takeUntilDestroyed(this.destroy))
-    .subscribe({ next: (data: PageEvent) => console.log(data) });
+  public setPagination($event: PageEvent) {
+    this.pokemonsToDisplay = this.originalPokemonsList.slice($event.pageIndex * $event.pageSize,
+      $event.pageIndex * $event.pageSize + $event.pageSize);
+  }
+
+  private setDefaultPagination(): void{
+    this.setPagination({
+      previousPageIndex: 0,
+      pageIndex: 0,
+      pageSize: this.pageSize,
+      length: this.tempTotalNumber
+    });
   }
 
 
