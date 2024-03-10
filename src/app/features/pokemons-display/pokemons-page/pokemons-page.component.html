@@ -1,4 +1,9 @@
 <ng-container *ngIf="pokemonsToDisplay.length">
+
+  <form class="example-form">
+      <input type="text" matInput [formControl]="searchFormControl" (keydown.enter)="avoidEnter($event)" placeholder="Search pokemon">
+  </form>
+
   <div class="display-pokemons">
     <ng-container *ngFor="let pokemon of pokemonsToDisplay; let i = index">
       <app-pokemon
@@ -10,7 +15,7 @@
     </ng-container>
   </div>
 
-  <mat-paginator
+  <mat-paginator *ngIf="pokemonsToDisplay.length > 1"
     (page)="setPagination($event)"
     [length]="tempTotalNumber"
     [pageSize]="pageSize"

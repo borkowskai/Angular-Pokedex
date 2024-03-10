@@ -7,6 +7,7 @@ import { PokeApiService, Pokemon } from '../../../core';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
 import { cloneDeep } from 'lodash';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -25,6 +26,10 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   public pageSize: number = 5;
   public selectedCardId!: number;
   public savedAsFavorites: string[] = [];
+  public searchFormControl = new FormControl('', []);
+
+  private typingTimer! : ReturnType<typeof setTimeout>;
+  private typingTimout = 1000;
 
   constructor(
     private pokeApiService: PokeApiService,
@@ -35,6 +40,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.displayPokemons();
+    this.listenSearchBar();
   }
 
   public ngOnDestroy(): void {
@@ -116,7 +122,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
       $event.pageIndex * $event.pageSize + $event.pageSize);
   }
 
-  private setDefaultPagination(): void{
+  private setDefaultPagination(): void {
     this.setPagination({
       previousPageIndex: 0,
       pageIndex: 0,
@@ -125,9 +131,39 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectItem(pokemon: PokemonDetail, index: number): void{
+  private listenSearchBar() {
+    this.searchFormControl.valueChanges
+    .pipe(
+      takeUntilDestroyed(this.destroyRef)
+    )
+    .subscribe({
+      next: value => {
+        if(this.typingTimer){
+          clearTimeout(this.typingTimer);
+        }
+        this.typingTimer =  setTimeout(() => {
+          const foundItem = this.fullPokemonsList.find(el =>
+            el.name.toLowerCase().trim() === value);
+
+          if(foundItem){
+            this.pokemonsToDisplay = [foundItem];
+          } else {
+            this.pokemonsToDisplay = this.fullPokemonsList.slice(0,5);
+          }
+        }, this.typingTimout);
+
+      }
+    });
+  }
+
+  public selectItem(pokemon: PokemonDetail, index: number): void {
     this.selectedCardId = index;
     this.router.navigate(['/', 'detail'], { queryParams: { name: pokemon.name } });
+  }
+
+  public avoidEnter($event: any){
+    // added because enter triggers refresh page
+    $event.preventDefault();
   }
 }
 
