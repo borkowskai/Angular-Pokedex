@@ -3,8 +3,7 @@ import { Component, DestroyRef, HostListener, OnDestroy, OnInit } from '@angular
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PokeApiService, Pokemon } from '../../../core';
-import { PokemonDetail } from '../../../core/models/pokemon-detail';
+import { PokeApiService, Pokemon, PokemonDetail } from '../../../core';
 import { cloneDeep } from 'lodash';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -27,8 +26,9 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   public selectedCardId!: number;
   public savedAsFavorites: string[] = [];
   public searchFormControl = new FormControl('', []);
+  public favoriteView!: boolean;
 
-  private typingTimer! : ReturnType<typeof setTimeout>;
+  private typingTimer!: ReturnType<typeof setTimeout>;
   private typingTimout = 1000;
 
   constructor(
@@ -137,17 +137,17 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: value => {
-        if(this.typingTimer){
+        if (this.typingTimer) {
           clearTimeout(this.typingTimer);
         }
-        this.typingTimer =  setTimeout(() => {
+        this.typingTimer = setTimeout(() => {
           const foundItem = this.fullPokemonsList.find(el =>
             el.name.toLowerCase().trim() === value);
 
-          if(foundItem){
+          if (foundItem) {
             this.pokemonsToDisplay = [foundItem];
           } else {
-            this.pokemonsToDisplay = this.fullPokemonsList.slice(0,5);
+            this.pokemonsToDisplay = this.fullPokemonsList.slice(0, 5);
           }
         }, this.typingTimout);
 
@@ -160,7 +160,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/', 'detail'], { queryParams: { name: pokemon.name } });
   }
 
-  public avoidEnter($event: any){
+  public avoidEnter($event: any) {
     // added because enter triggers refresh page
     $event.preventDefault();
   }
@@ -174,6 +174,19 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   private saveInLocalStorage(){
     localStorage.removeItem(this.localStorageKey);
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedAsFavorites));
+  }
+
+  public displayFavorites() {
+    this.favoriteView = true;
+    const savedFavorites: PokemonDetail[] = [];
+    for (const item of this.savedAsFavorites) {
+      const found = this.fullPokemonsList.find(el => el.name === item);
+      if (found) {
+        savedFavorites.push(found);
+      }
+    }
+    console.log('test', savedFavorites);
+    this.pokemonsToDisplay = savedFavorites;
   }
 }
 
