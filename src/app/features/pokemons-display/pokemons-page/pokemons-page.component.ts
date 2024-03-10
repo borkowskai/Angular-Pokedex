@@ -79,12 +79,12 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
 
   private updateFavoritesLocal(pokemonNames: string[], currentPokemonList: PokemonDetail[]): PokemonDetail[] {
     const pokemonList: PokemonDetail[] = cloneDeep(currentPokemonList);
-    for (const pokemoName of pokemonNames) {
+    for (const pokemonName of pokemonNames) {
 
-      const itemToUpdate = pokemonList.find(item => item.name === pokemoName);
-      const index = pokemonList.findIndex(item => item.name === pokemoName);
+      const itemToUpdate = pokemonList.find(item => item.name === pokemonName);
+      const index = pokemonList.findIndex(item => item.name === pokemonName);
       if (itemToUpdate) {
-        itemToUpdate.favorite = itemToUpdate.favorite ? false : true;
+        itemToUpdate.favorite = !itemToUpdate.favorite;
         pokemonList[index] = itemToUpdate;
       }
     }
@@ -166,7 +166,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  beforeunloadHandler(event: Event) {
+  beforeunloadHandler(_event: Event) {
     // Save data to local storage before the app is closed
     this.saveInLocalStorage();
   }
