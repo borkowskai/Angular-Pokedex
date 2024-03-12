@@ -1,6 +1,15 @@
 <ng-container *ngIf="pokemonsToDisplay.length">
 
-  <form class="example-form">
+  <mat-card-actions *ngIf="!favoriteView"
+    (click)="displayFavorites()">
+    <i class="material-icons">account_circle</i>
+  </mat-card-actions>
+  <mat-card-actions *ngIf="favoriteView"
+    (click)="backToMainPage()">
+    <i class="material-icons">home</i>
+  </mat-card-actions>
+
+  <form *ngIf="!favoriteView" class="example-form">
       <input type="text" matInput [formControl]="searchFormControl" (keydown.enter)="avoidEnter($event)" placeholder="Search pokemon">
   </form>
 
@@ -15,7 +24,7 @@
     </ng-container>
   </div>
 
-  <mat-paginator *ngIf="pokemonsToDisplay.length > 1"
+  <mat-paginator *ngIf="pokemonsToDisplay.length > 1 && !favoriteView"
     (page)="setPagination($event)"
     [length]="tempTotalNumber"
     [pageSize]="pageSize"

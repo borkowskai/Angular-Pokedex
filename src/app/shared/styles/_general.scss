@@ -6,9 +6,15 @@ mat-paginator.mat-mdc-paginator .mat-mdc-paginator-outer-container .mat-mdc-pagi
   }
 }
 
-app-pokemons-page mat-card-actions {
+app-pokemons-page mat-card-actions, app-pokemon-detail mat-card-actions {
   margin-right: $regular-space;
   display: flex;
   justify-content: flex-end;
+  color: $app-grey;
+
+  &:hover, &:focus, &:focus-visible {
+    color: $app-grey-darken;
+  }
 }
+
 
