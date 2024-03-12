@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
@@ -44,8 +44,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    localStorage.removeItem(this.localStorageKey);
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedAsFavorites));
+    this.saveInLocalStorage();
   }
 
   public displayPokemons() {
@@ -164,6 +163,17 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
   public avoidEnter($event: any){
     // added because enter triggers refresh page
     $event.preventDefault();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event: Event) {
+    // Save data to local storage before the app is closed
+    this.saveInLocalStorage();
+  }
+
+  private saveInLocalStorage(){
+    localStorage.removeItem(this.localStorageKey);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedAsFavorites));
   }
 }
 
