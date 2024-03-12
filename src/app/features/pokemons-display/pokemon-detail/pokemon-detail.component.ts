@@ -1,5 +1,5 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PokemonDetail } from '../../../core/models/pokemon-detail';
 import { PokeApiService } from '../../../core';
@@ -16,6 +16,7 @@ export class PokemonDetailComponent implements OnInit {
 
   constructor(private readonly activatedRoute: ActivatedRoute,
               private pokeApiService: PokeApiService,
+              private router: Router,
               private destroyRef: DestroyRef) {
   }
 
@@ -51,6 +52,10 @@ export class PokemonDetailComponent implements OnInit {
         console.error(`Pokemon Detail page: issue in receiving the data from api. Detail error: ${err}`);
       }
     });
+  }
+
+  public backToMainPage(){
+    this.router.navigate(['/'], );
   }
 
 

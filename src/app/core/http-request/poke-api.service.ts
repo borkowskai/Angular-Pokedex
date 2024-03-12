@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, tap } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { PokemonsList } from '../models/pokemons-list';
 import { PokemonDetail } from '../models/pokemon-detail';
 

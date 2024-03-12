@@ -5,7 +5,6 @@ import { MockComponent, MockDirective, MockProvider } from 'ng-mocks';
 import { MatCard, MatCardActions, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { PokemonDetailComponent } from '../pokemon-detail/pokemon-detail.component';
 import { PokemonDetail, Sprite } from '../../../core/models/pokemon-detail';
 
 describe('PokemonComponent', () => {

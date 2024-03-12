@@ -1,5 +1,9 @@
-<div *ngIf="pokemon" class="pokemon-detail">
+<mat-card-actions
+  (click)="backToMainPage()">
+  <i class="material-icons">home</i>
+</mat-card-actions>
 
+<div *ngIf="pokemon" class="pokemon-detail">
   <div class="inner-content">
     <h2> Please meet your new friend:</h2>
 
@@ -26,6 +30,5 @@
       </mat-card-content>
     </mat-card>
   </div>
-
 </div>
 
