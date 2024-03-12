@@ -171,7 +171,7 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
     this.saveInLocalStorage();
   }
 
-  private saveInLocalStorage(){
+  private saveInLocalStorage() {
     localStorage.removeItem(this.localStorageKey);
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedAsFavorites));
   }
@@ -185,8 +185,12 @@ export class PokemonsPageComponent implements OnInit, OnDestroy {
         savedFavorites.push(found);
       }
     }
-    console.log('test', savedFavorites);
     this.pokemonsToDisplay = savedFavorites;
+  }
+
+  public backToMainPage() {
+    this.favoriteView = false;
+    this.pokemonsToDisplay = this.fullPokemonsList.slice(0,5);
   }
 }
 

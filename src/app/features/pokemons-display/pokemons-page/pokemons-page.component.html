@@ -1,11 +1,15 @@
 <ng-container *ngIf="pokemonsToDisplay.length">
 
-  <mat-card-actions
+  <mat-card-actions *ngIf="!favoriteView"
     (click)="displayFavorites()">
     <i class="material-icons">account_circle</i>
   </mat-card-actions>
+  <mat-card-actions *ngIf="favoriteView"
+    (click)="backToMainPage()">
+    <i class="material-icons">home</i>
+  </mat-card-actions>
 
-  <form class="example-form">
+  <form *ngIf="!favoriteView" class="example-form">
       <input type="text" matInput [formControl]="searchFormControl" (keydown.enter)="avoidEnter($event)" placeholder="Search pokemon">
   </form>
 
